@@ -9,7 +9,7 @@ beforeEach(()=>{
     items.push(testItem);
 });
 afterEach(()=>{
-    items.length = 0;
+    items = [];
 });
 
 describe('Test connection',()=>{
@@ -55,6 +55,7 @@ describe('Test items POST route',()=>{
 
         let resCheck = await request(app).get('/items');
         expect(resCheck.body.length).toEqual(2);
+        items = [];
     });
     test('Test an error is returned if name is undefined', async ()=>{
         let res = await request(app).post('/items').send({
@@ -90,6 +91,7 @@ describe('Test items PATCH route',()=>{
         expect(resTwo).not.toBeNull();
         expect(resTwo.body.name).toEqual('test_updated');
         expect(resTwo.body.price).toEqual(5.00);
+        items = [];
     });
     test('Test it throws an error for an invalid item', async () =>{
         let res = await request(app).patch('/items/asdf').send({
@@ -122,13 +124,13 @@ describe('Test items PATCH route',()=>{
 
 describe('Tests for DELETE route', ()=>{
     test('Test it can delete an item', async ()=>{
-        let res = await request(app).delete('/items/test');
+        let res = await request(app).delete('/items/test2');
         expect(res).not.toBeNull();
         expect(res.body.message).toEqual('Deleted');
 
         let resTwo = await request(app).get('/items');
         expect(resTwo).not.toBeNull();
-        expect(resTwo.body.length).toEqual(0);
+        expect(resTwo.body.length).toEqual(1);
     });
     test('Test it throws a 404 if the item is not found', async ()=>{
         let res = await request(app).delete('/items/asdf');

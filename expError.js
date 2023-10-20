@@ -3,7 +3,7 @@ class ExpError extends Error{
         super();
         this.message = message;
         this.status = status || 500;
-        //console.error(this.stack);
+        console.error(this.stack);
     }
 }
 

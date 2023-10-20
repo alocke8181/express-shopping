@@ -65,17 +65,20 @@ router.patch('/:name', (req,res,next)=>{
 router.delete('/:name', (req,res,next) =>{
     let foundItem;
     try{
-        foundItem = items.find((item) => item.name == req.params.name)
-        console.log(foundItem);
+        foundItem = items.find((item) => item.name == req.params.name);
         if (!foundItem){
             throw new expError(`${req.params.name} could not be found!`,404);
         };
     }catch(e){
         return next(e);
     };
-    let index = items.indexOf(foundItem);
-    let newItems = items.toSpliced(index, 1);
-    items = newItems;
+    try{
+        let newItems = items.filter((item) => item.name !== foundItem.name);
+        items = newItems;
+    }catch(e){
+        console.log(e);
+        return next(e);
+    };
     return res.json({message : 'Deleted'});
 });
 
